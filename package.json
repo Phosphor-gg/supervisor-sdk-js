@@ -38,7 +38,7 @@
   "homepage": "https://supervisor.gg",
   "repository": {
     "type": "git",
-    "url": "https://github.com/phosphor-tech/supervisor-sdk-js"
+    "url": "https://github.com/Phosphor-gg/supervisor-sdk-js"
   },
   "devDependencies": {
     "tsup": "^8.0.0",
