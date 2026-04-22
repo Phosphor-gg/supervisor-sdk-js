@@ -8,21 +8,21 @@ import type {
   ConfirmAuthorizationResponse,
   ErrorResponse,
   ModerationResponse,
-  PartnerCheckoutRequest,
-  PartnerCheckoutResponse,
-  PartnerModerationRequest,
-  PartnerTokenResponse,
-  PartnerUserInfo,
+  PlatformCheckoutRequest,
+  PlatformCheckoutResponse,
+  PlatformModerationRequest,
+  PlatformTokenResponse,
+  PlatformUserInfo,
   ProvisionUserResponse,
   StripeConnectStatusResponse,
 } from "./models.js";
 
 const DEFAULT_BASE_URL = "https://api.supervisor.gg";
 
-export interface PartnerClientOptions {
-  /** Partner OAuth2 client ID. */
+export interface PlatformClientOptions {
+  /** Platform OAuth2 client ID. */
   clientId: string;
-  /** Partner OAuth2 client secret. */
+  /** Platform OAuth2 client secret. */
   clientSecret: string;
   /** Base URL for the API. Defaults to https://api.supervisor.gg */
   baseUrl?: string;
@@ -31,10 +31,10 @@ export interface PartnerClientOptions {
 }
 
 /**
- * Client for the Supervisor Partner API.
+ * Client for the Supervisor Platform API.
  * Handles OAuth2 client credentials token exchange and automatic refresh.
  */
-export class PartnerClient {
+export class PlatformClient {
   private readonly clientId: string;
   private readonly clientSecret: string;
   private readonly baseUrl: string;
@@ -42,7 +42,7 @@ export class PartnerClient {
   private accessToken?: string;
   private tokenExpiresAt = 0;
 
-  constructor(options: PartnerClientOptions) {
+  constructor(options: PlatformClientOptions) {
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
     this.baseUrl = (options.baseUrl ?? DEFAULT_BASE_URL).replace(/\/$/, "");
@@ -54,7 +54,7 @@ export class PartnerClient {
       return this.accessToken;
     }
 
-    const response = await fetch(`${this.baseUrl}/api/partner/token`, {
+    const response = await fetch(`${this.baseUrl}/api/platform/token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -68,7 +68,7 @@ export class PartnerClient {
       await this.handleError(response);
     }
 
-    const data = (await response.json()) as PartnerTokenResponse;
+    const data = (await response.json()) as PlatformTokenResponse;
     this.accessToken = data.access_token;
     this.tokenExpiresAt = Date.now() + data.expires_in * 1000;
     return this.accessToken;
@@ -122,36 +122,36 @@ export class PartnerClient {
 
   /** Provision or link a user by email. */
   async provisionUser(email: string): Promise<ProvisionUserResponse> {
-    return this.request("POST", "/api/partner/users/provision", { email });
+    return this.request("POST", "/api/platform/users/provision", { email });
   }
 
-  /** List all users linked to this partner. */
-  async listUsers(): Promise<PartnerUserInfo[]> {
-    return this.request("GET", "/api/partner/users");
+  /** List all users linked to this platform. */
+  async listUsers(): Promise<PlatformUserInfo[]> {
+    return this.request("GET", "/api/platform/users");
   }
 
   /** Get a specific linked user by ID. */
-  async getUser(userId: string): Promise<PartnerUserInfo> {
-    return this.request("GET", `/api/partner/users/${userId}`);
+  async getUser(userId: string): Promise<PlatformUserInfo> {
+    return this.request("GET", `/api/platform/users/${userId}`);
   }
 
   /** Moderate content on behalf of a linked user. */
-  async moderate(request: PartnerModerationRequest): Promise<ModerationResponse> {
-    return this.request("POST", "/api/partner/moderate", request);
+  async moderate(request: PlatformModerationRequest): Promise<ModerationResponse> {
+    return this.request("POST", "/api/platform/moderate", request);
   }
 
-  /** Create a Stripe checkout session for a partner user. */
-  async createCheckout(request: PartnerCheckoutRequest): Promise<PartnerCheckoutResponse> {
-    return this.request("POST", "/api/partner/checkout", request);
+  /** Create a Stripe checkout session for a platform user. */
+  async createCheckout(request: PlatformCheckoutRequest): Promise<PlatformCheckoutResponse> {
+    return this.request("POST", "/api/platform/checkout", request);
   }
 
   /** Confirm a user's authorization with the provided code. */
   async confirmAuthorization(code: string): Promise<ConfirmAuthorizationResponse> {
-    return this.request("POST", "/api/partner/users/confirm-authorization", { code });
+    return this.request("POST", "/api/platform/users/confirm-authorization", { code });
   }
 
   /** Get the Stripe Connect onboarding status. */
   async getConnectStatus(): Promise<StripeConnectStatusResponse> {
-    return this.request("GET", "/api/partner/connect/status");
+    return this.request("GET", "/api/platform/connect/status");
   }
 }

@@ -38,29 +38,29 @@ const username = await client.checkUsername("user123");
 console.log(username.flagged, username.score);
 ```
 
-## Partner API
+## Platform API
 
 For platform integrations using OAuth2 client credentials:
 
 ```typescript
-import { PartnerClient, Tier, BillingCycle } from "supervisor-sdk";
+import { PlatformClient, Tier, BillingCycle } from "supervisor-sdk";
 
-const partner = new PartnerClient({
+const platform = new PlatformClient({
   clientId: "...",
   clientSecret: "...",
 });
 
 // Provision a user
-const user = await partner.provisionUser("user@example.com");
+const user = await platform.provisionUser("user@example.com");
 
 // Moderate on behalf of a user
-const result = await partner.moderate({
+const result = await platform.moderate({
   user_email: "user@example.com",
   text: "check this",
 });
 
 // Create checkout session
-const checkout = await partner.createCheckout({
+const checkout = await platform.createCheckout({
   user_email: "user@example.com",
   tier: Tier.Standard,
   billing_cycle: BillingCycle.Monthly,
@@ -69,7 +69,7 @@ const checkout = await partner.createCheckout({
 });
 
 // List linked users
-const users = await partner.listUsers();
+const users = await platform.listUsers();
 ```
 
 ## Configuration

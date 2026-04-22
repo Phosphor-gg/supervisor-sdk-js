@@ -1,7 +1,7 @@
 export { SupervisorClient } from "./client.js";
 export type { SupervisorClientOptions } from "./client.js";
-export { PartnerClient } from "./partner.js";
-export type { PartnerClientOptions } from "./partner.js";
+export { PlatformClient } from "./platform.js";
+export type { PlatformClientOptions } from "./platform.js";
 export {
   SupervisorError,
   AuthenticationError,
@@ -20,14 +20,14 @@ export type {
   BatchModerationRequest,
   UsernameCheckRequest,
   UsernameCheckResponse,
-  PartnerTokenRequest,
-  PartnerTokenResponse,
+  PlatformTokenRequest,
+  PlatformTokenResponse,
   ProvisionUserRequest,
   ProvisionUserResponse,
-  PartnerModerationRequest,
-  PartnerCheckoutRequest,
-  PartnerCheckoutResponse,
-  PartnerUserInfo,
+  PlatformModerationRequest,
+  PlatformCheckoutRequest,
+  PlatformCheckoutResponse,
+  PlatformUserInfo,
   ConfirmAuthorizationRequest,
   ConfirmAuthorizationResponse,
   StripeConnectStatusResponse,

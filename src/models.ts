@@ -64,7 +64,7 @@ export interface UsernameCheckRequest {
   username: string;
 }
 
-export interface PartnerTokenRequest {
+export interface PlatformTokenRequest {
   client_id: string;
   client_secret: string;
   grant_type: string;
@@ -74,7 +74,7 @@ export interface ProvisionUserRequest {
   email: string;
 }
 
-export interface PartnerModerationRequest {
+export interface PlatformModerationRequest {
   user_email: string;
   text?: string;
   image?: string;
@@ -83,7 +83,7 @@ export interface PartnerModerationRequest {
   include_context?: boolean;
 }
 
-export interface PartnerCheckoutRequest {
+export interface PlatformCheckoutRequest {
   user_email: string;
   tier: Tier;
   billing_cycle: BillingCycle;
@@ -112,7 +112,7 @@ export interface UsernameCheckResponse {
   score: number;
 }
 
-export interface PartnerTokenResponse {
+export interface PlatformTokenResponse {
   access_token: string;
   token_type: string;
   expires_in: number;
@@ -125,7 +125,7 @@ export interface ProvisionUserResponse {
   is_newly_linked: boolean;
 }
 
-export interface PartnerUserInfo {
+export interface PlatformUserInfo {
   user_id: string;
   email: string;
   linked_at: string;
@@ -134,7 +134,7 @@ export interface PartnerUserInfo {
   tier: Tier;
 }
 
-export interface PartnerCheckoutResponse {
+export interface PlatformCheckoutResponse {
   checkout_url: string;
 }
 
