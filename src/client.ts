@@ -11,7 +11,6 @@ import type {
   ModerationResponse,
   UsernameCheckResponse,
 } from "./models.js";
-import { ModerationLabel, ModerationModel } from "./models.js";
 
 const DEFAULT_BASE_URL = "https://api.supervisor.gg";
 
@@ -98,6 +97,18 @@ export class SupervisorClient {
    * @returns Array of ModerationResponse, one per input text.
    */
   async moderateBatch(request: BatchModerationRequest): Promise<ModerationResponse[]> {
+    const { texts, images } = request;
+    if (
+      texts &&
+      texts.length > 0 &&
+      images &&
+      images.length > 0 &&
+      texts.length !== images.length
+    ) {
+      throw new Error(
+        `texts and images must have equal length when both are provided (got ${texts.length} texts and ${images.length} images)`,
+      );
+    }
     return this.request("POST", "/api/batch", request);
   }
 
@@ -114,9 +125,9 @@ export class SupervisorClient {
   /**
    * Get all available moderation labels.
    *
-   * @returns Array of all ModerationLabel values supported by the API.
+   * @returns Map of label name to its human-readable description.
    */
-  async getLabels(): Promise<ModerationLabel[]> {
+  async getLabels(): Promise<Record<string, string>> {
     return this.request("GET", "/api/labels");
   }
 }
