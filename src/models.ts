@@ -16,7 +16,6 @@ export enum ModerationLabel {
   Promotional = "promotional",
   Scam = "scam",
   Illegal = "illegal",
-  PersonalData = "personal-data",
 }
 
 /** Available AI moderation models. */
@@ -98,13 +97,18 @@ export interface ConfirmAuthorizationRequest {
 
 // --- Response types ---
 
+/**
+ * Result of a moderation request. Label fields are plain strings (not the
+ * ModerationLabel enum) so new or aliased labels returned by the server pass
+ * through rather than being treated as invalid.
+ */
 export interface ModerationResponse {
   flagged: boolean;
-  labels: ModerationLabel[];
-  implicit_labels?: ModerationLabel[];
+  labels: string[];
+  implicit_labels?: string[];
   model_version?: string;
   needs_context?: boolean;
-  context_labels?: ModerationLabel[];
+  context_labels?: string[];
   rewritten_text?: string;
 }
 
