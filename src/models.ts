@@ -55,6 +55,7 @@ export interface ModerationRequest {
 
 export interface BatchModerationRequest {
   texts: string[];
+  images?: string[];
   model?: ModerationModel;
   enabled_labels?: ModerationLabel[];
   include_context?: boolean;
