@@ -50,6 +50,7 @@ export interface ModerationRequest {
   model?: ModerationModel;
   enabled_labels?: ModerationLabel[];
   include_context?: boolean;
+  include_implicit?: boolean;
 }
 
 export interface BatchModerationRequest {
@@ -58,6 +59,7 @@ export interface BatchModerationRequest {
   model?: ModerationModel;
   enabled_labels?: ModerationLabel[];
   include_context?: boolean;
+  include_implicit?: boolean;
 }
 
 export interface UsernameCheckRequest {
@@ -81,6 +83,7 @@ export interface PlatformModerationRequest {
   model?: ModerationModel;
   enabled_labels?: ModerationLabel[];
   include_context?: boolean;
+  include_implicit?: boolean;
 }
 
 export interface PlatformCheckoutRequest {

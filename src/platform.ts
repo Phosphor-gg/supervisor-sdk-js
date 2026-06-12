@@ -41,6 +41,7 @@ export class PlatformClient {
   private readonly timeout: number;
   private accessToken?: string;
   private tokenExpiresAt = 0;
+  private refreshPromise?: Promise<string>;
 
   constructor(options: PlatformClientOptions) {
     this.clientId = options.clientId;
@@ -54,24 +55,45 @@ export class PlatformClient {
       return this.accessToken;
     }
 
-    const response = await fetch(`${this.baseUrl}/api/platform/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        client_id: this.clientId,
-        client_secret: this.clientSecret,
-        grant_type: "client_credentials",
-      }),
-    });
-
-    if (!response.ok) {
-      await this.handleError(response);
+    // Coalesce concurrent refreshes into a single in-flight request so that
+    // overlapping callers share one token exchange instead of each firing
+    // their own.
+    if (!this.refreshPromise) {
+      this.refreshPromise = this.refreshToken().finally(() => {
+        this.refreshPromise = undefined;
+      });
     }
 
-    const data = (await response.json()) as PlatformTokenResponse;
-    this.accessToken = data.access_token;
-    this.tokenExpiresAt = Date.now() + data.expires_in * 1000;
-    return this.accessToken;
+    return this.refreshPromise;
+  }
+
+  private async refreshToken(): Promise<string> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+    try {
+      const response = await fetch(`${this.baseUrl}/api/platform/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          client_id: this.clientId,
+          client_secret: this.clientSecret,
+          grant_type: "client_credentials",
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        await this.handleError(response);
+      }
+
+      const data = (await response.json()) as PlatformTokenResponse;
+      this.accessToken = data.access_token;
+      this.tokenExpiresAt = Date.now() + data.expires_in * 1000;
+      return this.accessToken;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
 
   private async request<T>(method: string, path: string, body?: unknown): Promise<T> {
