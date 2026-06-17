@@ -28,10 +28,10 @@ export enum ModerationModel {
 
 /** Subscription tiers. */
 export enum Tier {
-  Free = "Free",
-  Basic = "Basic",
-  Standard = "Standard",
-  Premium = "Premium",
+  Free = "free",
+  Basic = "basic",
+  Standard = "standard",
+  Premium = "premium",
 }
 
 /** Billing cycle options. */
