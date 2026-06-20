@@ -6,7 +6,7 @@ export enum ModerationLabel {
   Hate = "hate",
   Insult = "insult",
   Sexual = "sexual",
-  SexualMinors = "sexual/minors",
+  SexualUnlawful = "sexual/unlawful",
   SexualExplicit = "sexual/explicit",
   Sensitive = "sensitive",
   Violence = "violence",
