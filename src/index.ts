@@ -27,6 +27,8 @@ export type {
   PlatformModerationRequest,
   PlatformCheckoutRequest,
   PlatformCheckoutResponse,
+  PlatformChangePlanRequest,
+  PlatformChangePlanResponse,
   PlatformUserInfo,
   ConfirmAuthorizationRequest,
   ConfirmAuthorizationResponse,

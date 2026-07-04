@@ -12,12 +12,12 @@ import type {
   UsernameCheckResponse,
 } from "./models.js";
 
-const DEFAULT_BASE_URL = "https://api.supervisor.gg";
+const DEFAULT_BASE_URL = "https://supervisor.gg";
 
 export interface SupervisorClientOptions {
   /** Your Supervisor API key. */
   apiKey: string;
-  /** Base URL for the API. Defaults to https://api.supervisor.gg */
+  /** Base URL for the API. Defaults to https://supervisor.gg */
   baseUrl?: string;
   /** Request timeout in milliseconds. Defaults to 30000. */
   timeout?: number;
