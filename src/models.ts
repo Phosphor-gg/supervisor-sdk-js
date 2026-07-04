@@ -158,6 +158,54 @@ export interface PlatformChangePlanResponse {
   billing_cycle: BillingCycle;
 }
 
+/** A subscription plan price a platform can sell. Amount is in cents. */
+export interface PlanPrice {
+  price_id: string;
+  product_id: string;
+  tier: Tier;
+  billing_cycle: BillingCycle;
+  amount: number;
+  /** Always null on the platform products endpoint: mint links via createCheckout so revenue share applies. */
+  payment_link: string | null;
+  currency: string;
+}
+
+/** A one-time credit pack a platform can sell. */
+export interface CreditPack {
+  id: string;
+  price_id: string;
+  name: string;
+  description: string | null;
+  price_cents: number;
+  currency: string;
+  credits_amount: number;
+}
+
+export interface PlatformProductsResponse {
+  plans: PlanPrice[];
+  credit_packs: CreditPack[];
+}
+
+export interface PlatformCreditCheckoutRequest {
+  user_email: string;
+  /** price_id of a credit pack from getProducts() */
+  price_id: string;
+  success_url: string;
+  cancel_url: string;
+}
+
+export interface PlatformUserCreditsResponse {
+  user_id: string;
+  email: string;
+  /** Total usable credits right now (monthly remaining plus extra). */
+  balance: number;
+  monthly_allocation: number;
+  used_this_month: number;
+  remaining_this_month: number;
+  extra_credits: number;
+  reset_date: string | null;
+}
+
 export interface ConfirmAuthorizationResponse {
   user_id: string;
   email: string;
