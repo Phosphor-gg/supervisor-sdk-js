@@ -8,6 +8,8 @@ import type {
   ConfirmAuthorizationResponse,
   ErrorResponse,
   ModerationResponse,
+  PlatformChangePlanRequest,
+  PlatformChangePlanResponse,
   PlatformCheckoutRequest,
   PlatformCheckoutResponse,
   PlatformModerationRequest,
@@ -17,14 +19,14 @@ import type {
   StripeConnectStatusResponse,
 } from "./models.js";
 
-const DEFAULT_BASE_URL = "https://api.supervisor.gg";
+const DEFAULT_BASE_URL = "https://supervisor.gg";
 
 export interface PlatformClientOptions {
   /** Platform OAuth2 client ID. */
   clientId: string;
   /** Platform OAuth2 client secret. */
   clientSecret: string;
-  /** Base URL for the API. Defaults to https://api.supervisor.gg */
+  /** Base URL for the API. Defaults to https://supervisor.gg */
   baseUrl?: string;
   /** Request timeout in milliseconds. Defaults to 30000. */
   timeout?: number;
@@ -165,6 +167,11 @@ export class PlatformClient {
   /** Create a Stripe checkout session for a platform user. */
   async createCheckout(request: PlatformCheckoutRequest): Promise<PlatformCheckoutResponse> {
     return this.request("POST", "/api/platform/checkout", request);
+  }
+
+  /** Change the plan of an existing subscription for a platform user. */
+  async changePlan(request: PlatformChangePlanRequest): Promise<PlatformChangePlanResponse> {
+    return this.request("POST", "/api/platform/change-plan", request);
   }
 
   /** Confirm a user's authorization with the provided code. */

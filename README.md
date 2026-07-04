@@ -70,14 +70,38 @@ const checkout = await platform.createCheckout({
 
 // List linked users
 const users = await platform.listUsers();
+
+// Get a specific linked user by ID
+const info = await platform.getUser(user.user_id);
+console.log(info.authorized, info.tier);
+
+// Confirm a user's authorization with the code from the redirect
+const confirmed = await platform.confirmAuthorization("auth-code-from-redirect");
+console.log(confirmed.user_id, confirmed.email);
+
+// Check Stripe Connect onboarding status
+const status = await platform.getConnectStatus();
+console.log(status.onboarding_complete, status.charges_enabled);
+
+// Change the plan of an existing subscription
+const changed = await platform.changePlan({
+  user_email: "user@example.com",
+  tier: Tier.Premium,
+  billing_cycle: BillingCycle.Annual,
+});
+console.log(changed.subscription_id, changed.tier, changed.billing_cycle);
 ```
+
+### Checkout and plan changes
+
+`createCheckout` returns a 403 error if the user has not authorized the platform, and a 400 error if the user already has an active subscription (use `changePlan` instead). `changePlan` returns a 403 error if the subscription was not originated by this platform, and a 400 error if the user has no active subscription. Revenue share is set at subscription creation and is preserved across plan changes.
 
 ## Configuration
 
 ```typescript
 const client = new SupervisorClient({
   apiKey: "sk-...",
-  baseUrl: "https://api.supervisor.gg", // default
+  baseUrl: "https://supervisor.gg", // default
   timeout: 30000, // ms, default
 });
 ```
@@ -114,7 +138,7 @@ try {
 | `hate` | Hate/Racism |
 | `insult` | Insult |
 | `sexual` | Sexual |
-| `sexual/minors` | Sexual (Minors) |
+| `sexual/unlawful` | Sexual (Unlawful) |
 | `sexual/explicit` | Sexual (Explicit) |
 | `sensitive` | Sensitive Content |
 | `violence` | Violence |
@@ -124,7 +148,6 @@ try {
 | `promotional` | Promotional |
 | `scam` | Scam/Incoherent |
 | `illegal` | Illegal Activity |
-| `personal-data` | Personal Data |
 
 ## Models
 

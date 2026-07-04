@@ -94,6 +94,12 @@ export interface PlatformCheckoutRequest {
   cancel_url: string;
 }
 
+export interface PlatformChangePlanRequest {
+  user_email: string;
+  tier: Tier;
+  billing_cycle: BillingCycle;
+}
+
 export interface ConfirmAuthorizationRequest {
   code: string;
 }
@@ -144,6 +150,12 @@ export interface PlatformUserInfo {
 
 export interface PlatformCheckoutResponse {
   checkout_url: string;
+}
+
+export interface PlatformChangePlanResponse {
+  subscription_id: string;
+  tier: Tier;
+  billing_cycle: BillingCycle;
 }
 
 export interface ConfirmAuthorizationResponse {
