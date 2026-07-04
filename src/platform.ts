@@ -17,6 +17,9 @@ import type {
   PlatformUserInfo,
   ProvisionUserResponse,
   StripeConnectStatusResponse,
+  PlatformProductsResponse,
+  PlatformCreditCheckoutRequest,
+  PlatformUserCreditsResponse,
 } from "./models.js";
 
 const DEFAULT_BASE_URL = "https://supervisor.gg";
@@ -172,6 +175,21 @@ export class PlatformClient {
   /** Change the plan of an existing subscription for a platform user. */
   async changePlan(request: PlatformChangePlanRequest): Promise<PlatformChangePlanResponse> {
     return this.request("POST", "/api/platform/change-plan", request);
+  }
+
+  /** List the plans and credit packs this platform can sell. */
+  async getProducts(): Promise<PlatformProductsResponse> {
+    return this.request("GET", "/api/platform/products");
+  }
+
+  /** Create a Stripe checkout for a credit pack purchase (revenue share applies). */
+  async createCreditCheckout(request: PlatformCreditCheckoutRequest): Promise<PlatformCheckoutResponse> {
+    return this.request("POST", "/api/platform/checkout-credits", request);
+  }
+
+  /** Remaining credits of an authorized linked user. */
+  async getUserCredits(userId: string): Promise<PlatformUserCreditsResponse> {
+    return this.request("GET", `/api/platform/users/${userId}/credits`);
   }
 
   /** Confirm a user's authorization with the provided code. */

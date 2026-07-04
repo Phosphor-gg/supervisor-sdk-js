@@ -96,6 +96,37 @@ console.log(changed.subscription_id, changed.tier, changed.billing_cycle);
 
 `createCheckout` returns a 403 error if the user has not authorized the platform, and a 400 error if the user already has an active subscription (use `changePlan` instead). `changePlan` returns a 403 error if the subscription was not originated by this platform, and a 400 error if the user has no active subscription. Revenue share is set at subscription creation and is preserved across plan changes.
 
+### Products and checkout links
+
+Platforms sell Supervisor plans and credit packs from their own site. List the products, render them however you like, and when a user clicks, mint a per-user checkout link and redirect. Revenue share applies to both product types.
+
+```ts
+const products = await platform.getProducts();
+// products.plans: subscription tiers with prices in cents
+// products.credit_packs: one-time credit packs
+
+// Plan checkout (new subscription)
+const checkout = await platform.createCheckout({ ... });
+
+// Credit pack checkout (one-time payment)
+const credits = await platform.createCreditCheckout({
+  user_email: "user@example.com",
+  price_id: products.credit_packs[0].price_id,
+  success_url: "https://myapp.com/thanks",
+  cancel_url: "https://myapp.com/pricing",
+});
+// redirect the user to credits.checkout_url
+```
+
+Show an authorized user their remaining credits:
+
+```ts
+const balance = await platform.getUserCredits(userId);
+// balance.balance is the total usable right now; monthly and extra breakdowns included
+```
+
+Returns 403 if the user has not authorized your platform.
+
 ## Configuration
 
 ```typescript
