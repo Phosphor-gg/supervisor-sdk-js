@@ -32,6 +32,8 @@ export enum Tier {
   Basic = "basic",
   Standard = "standard",
   Premium = "premium",
+  /** Lifetime plan: one-time purchase, no billing cycle. */
+  Verified = "verified",
 }
 
 /** Billing cycle options. */
@@ -181,9 +183,22 @@ export interface CreditPack {
   credits_amount: number;
 }
 
+/** The lifetime (Verified) plan: one-time purchase, no billing cycle. */
+export interface LifetimePlan {
+  product_id: string;
+  price_id: string;
+  name: string;
+  /** Price in cents. */
+  amount: number;
+  currency: string;
+  monthly_credits: number;
+}
+
 export interface PlatformProductsResponse {
   plans: PlanPrice[];
   credit_packs: CreditPack[];
+  /** Present when a lifetime plan is configured. Sold via createCheckout with tier "verified". */
+  lifetime?: LifetimePlan | null;
 }
 
 export interface PlatformCreditCheckoutRequest {
