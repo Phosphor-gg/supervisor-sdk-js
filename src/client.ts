@@ -4,6 +4,7 @@ import {
   SupervisorError,
   ValidationError,
 } from "./errors.js";
+import { prepareImage } from "./imagePrep.js";
 import type {
   BatchModerationRequest,
   ErrorResponse,
@@ -87,7 +88,10 @@ export class SupervisorClient {
    * @returns ModerationResponse with flagged status and detected labels.
    */
   async moderate(request: ModerationRequest): Promise<ModerationResponse> {
-    return this.request("POST", "/api/moderate", request);
+    const body = request.image
+      ? { ...request, image: await prepareImage(request.image) }
+      : request;
+    return this.request("POST", "/api/moderate", body);
   }
 
   /**
@@ -109,7 +113,14 @@ export class SupervisorClient {
         `texts and images must have equal length when both are provided (got ${texts.length} texts and ${images.length} images)`,
       );
     }
-    return this.request("POST", "/api/batch", request);
+    let body: BatchModerationRequest = request;
+    if (images && images.length > 0) {
+      const prepared = await Promise.all(
+        images.map((image) => (image ? prepareImage(image) : image)),
+      );
+      body = { ...request, images: prepared };
+    }
+    return this.request("POST", "/api/batch", body);
   }
 
   /**

@@ -4,6 +4,7 @@ import {
   SupervisorError,
   ValidationError,
 } from "./errors.js";
+import { prepareImage } from "./imagePrep.js";
 import type {
   ConfirmAuthorizationResponse,
   ErrorResponse,
@@ -164,7 +165,10 @@ export class PlatformClient {
 
   /** Moderate content on behalf of a linked user. */
   async moderate(request: PlatformModerationRequest): Promise<ModerationResponse> {
-    return this.request("POST", "/api/platform/moderate", request);
+    const body = request.image
+      ? { ...request, image: await prepareImage(request.image) }
+      : request;
+    return this.request("POST", "/api/platform/moderate", body);
   }
 
   /** Create a Stripe checkout session for a platform user. */
