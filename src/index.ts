@@ -2,6 +2,7 @@ export { SupervisorClient } from "./client.js";
 export type { SupervisorClientOptions } from "./client.js";
 export { PlatformClient } from "./platform.js";
 export type { PlatformClientOptions } from "./platform.js";
+export { prepareImage } from "./imagePrep.js";
 export {
   SupervisorError,
   AuthenticationError,
