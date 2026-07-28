@@ -62,7 +62,7 @@ const result = await platform.moderate({
 // Create checkout session
 const checkout = await platform.createCheckout({
   user_email: "user@example.com",
-  tier: Tier.Standard,
+  tier: Tier.Premium,
   billing_cycle: BillingCycle.Monthly,
   success_url: "https://yourapp.com/success",
   cancel_url: "https://yourapp.com/cancel",

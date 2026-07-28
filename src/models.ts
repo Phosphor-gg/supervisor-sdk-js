@@ -26,10 +26,17 @@ export enum ModerationModel {
   Arbiter = "arbiter",
 }
 
-/** Subscription tiers. */
+/**
+ * Subscription tiers.
+ *
+ * Premium is the only plan on sale. Free, Basic and Standard are closed to new
+ * subscribers and remain only so existing subscriptions resolve.
+ */
 export enum Tier {
   Free = "free",
+  /** @deprecated Legacy plan, closed to new subscribers. */
   Basic = "basic",
+  /** @deprecated Legacy plan, closed to new subscribers. */
   Standard = "standard",
   Premium = "premium",
 }
