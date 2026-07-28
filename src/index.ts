@@ -3,6 +3,7 @@ export type { SupervisorClientOptions } from "./client.js";
 export { PlatformClient } from "./platform.js";
 export type { PlatformClientOptions } from "./platform.js";
 export { prepareImage } from "./imagePrep.js";
+export { MAX_VIDEO_BYTES } from "./models.js";
 export {
   SupervisorError,
   AuthenticationError,
@@ -41,4 +42,7 @@ export type {
   ConfirmAuthorizationResponse,
   StripeConnectStatusResponse,
   ErrorResponse,
+  VideoModerationRequest,
+  VideoFrameResult,
+  VideoModerationResponse,
 } from "./models.js";

@@ -236,3 +236,37 @@ export interface ErrorResponse {
   error: string;
   details?: string;
 }
+
+/** Maximum video size accepted. Mirrors MAX_VIDEO_BYTES in supervisor-types. */
+export const MAX_VIDEO_BYTES = 10 * 1024 * 1024;
+
+/** Request to moderate a short video. */
+export interface VideoModerationRequest {
+  /** Base64-encoded video, optionally with a `data:video/...;base64,` prefix. */
+  video: string;
+  model?: ModerationModel;
+  enabled_labels?: ModerationLabel[];
+  include_implicit?: boolean;
+}
+
+/** One analysed frame, with where in the clip it came from. */
+export interface VideoFrameResult {
+  timestamp_ms: number;
+  flagged: boolean;
+  labels: ModerationLabel[];
+  extracted_text?: string | null;
+}
+
+export interface VideoModerationResponse {
+  /** True when any analysed frame was flagged. */
+  flagged: boolean;
+  /** Union of the labels across every analysed frame. */
+  labels: ModerationLabel[];
+  frames: VideoFrameResult[];
+  frames_analysed: number;
+  duration_secs: number;
+  /** Container codec as detected, e.g. "h264". */
+  codec: string;
+  /** Which decoder ran, "nvdec" or "cpu". */
+  decoder: string;
+}
