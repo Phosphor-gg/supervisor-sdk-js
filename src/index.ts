@@ -33,7 +33,6 @@ export type {
   PlatformChangePlanResponse,
   PlanPrice,
   CreditPack,
-  LifetimePlan,
   PlatformProductsResponse,
   PlatformCreditCheckoutRequest,
   PlatformUserCreditsResponse,
